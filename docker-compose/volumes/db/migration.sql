@@ -511,7 +511,7 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'event_type_enum') THEN
         CREATE TYPE event_type_enum AS ENUM (
             'task_started','task_completed','tool_usage_started',
-            'tool_usage_finished','crew_completed','human_asked', 'human_response', 'error'
+            'tool_usage_finished','crew_completed','human_asked', 'human_response', 'human_checked', 'task_working', 'error'
         );
         RAISE NOTICE 'Created event_type_enum enum type';
     ELSE
@@ -525,6 +525,30 @@ BEGIN
             RAISE NOTICE 'Added error value to event_type_enum enum type';
         ELSE
             RAISE NOTICE 'error value already exists in event_type_enum enum type';
+        END IF;
+        
+        -- 기존 enum에 human_checked 값 추가
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_enum 
+            WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'event_type_enum')
+            AND enumlabel = 'human_checked'
+        ) THEN
+            ALTER TYPE event_type_enum ADD VALUE 'human_checked';
+            RAISE NOTICE 'Added human_checked value to event_type_enum enum type';
+        ELSE
+            RAISE NOTICE 'human_checked value already exists in event_type_enum enum type';
+        END IF;
+        
+        -- 기존 enum에 task_working 값 추가
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_enum 
+            WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'event_type_enum')
+            AND enumlabel = 'task_working'
+        ) THEN
+            ALTER TYPE event_type_enum ADD VALUE 'task_working';
+            RAISE NOTICE 'Added task_working value to event_type_enum enum type';
+        ELSE
+            RAISE NOTICE 'task_working value already exists in event_type_enum enum type';
         END IF;
     END IF;
 

@@ -115,7 +115,7 @@
                     class="mb-2"
                     rows="3"
                 ></v-textarea>
-                <v-combobox
+                <!-- <v-combobox
                     v-model="selectedTools"
                     :items="toolList"
                     :label="$t('agentField.agentTools')"
@@ -134,7 +134,7 @@
                     clearable
                     closable-chips
                     variant="outlined"
-                ></v-combobox>
+                ></v-combobox> -->
                 <v-row dense
                     class="ma-0 pa-0"
                 >

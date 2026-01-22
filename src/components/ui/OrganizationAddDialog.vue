@@ -221,7 +221,7 @@ export default {
                 type: 'edit',
                 label: 'organizationChartDefinition.editTeam',
                 icon: 'mdi-pencil',
-                color: 'secondary',
+                color: 'grey',
                 disabled: true
             },
             {
