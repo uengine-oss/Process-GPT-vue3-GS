@@ -608,7 +608,8 @@ export default {
                     // (AI로 생성한 경우 processDefinitionId가 임시로 있지만 실제로는 저장 안 됨)
                     me.isNew = true;
                     me.information.proc_def_id = me.process.processDefinitionId || '';
-                    me.information.name = me.process.processDefinitionName || '';
+                    // name이 비어있을 경우 processDefinitionId를 fallback으로 사용
+                    me.information.name = me.process.processDefinitionName || me.processName || me.process.processDefinitionId || '';
                 }
             } else {
                 me.isNew = true;
@@ -760,13 +761,16 @@ export default {
                     if (!me.information.proc_def_id) return; // 항상 ID는 필수.
                     if (me.isNew && !me.information.name) return; // 초기 저장시에는 이름 필수.
 
+                    // name이 비어있을 경우 proc_def_id를 fallback으로 사용
+                    const saveName = me.information.name || me.information.proc_def_id;
+
                     me.$emit('save', {
                         arcv_id: me.process
                             ? `${me.process.processDefinitionId}_${me.newVersion}`
                             : `${me.information.proc_def_id}_${me.newVersion}`,
                         version: me.information.version_tag ? me.newVersion : null,
                         version_tag: me.information.version_tag,
-                        name: me.information.name,
+                        name: saveName,
                         proc_def_id: me.information.proc_def_id,
                         prevSnapshot: me.information.snapshot,
                         prevDiff: me.information.diff,
