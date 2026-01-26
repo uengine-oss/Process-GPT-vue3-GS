@@ -4,6 +4,8 @@
         <div class="footer-content ma-0 pa-3 text-center">
             <!-- Copyright -->
             <div class="mb-2 text-caption text-medium-emphasis">
+                Process-GPT v1.0
+                <br><br>
                 Copyright © uEngine Solutions.<br>All Rights Reserved
             </div>
             
