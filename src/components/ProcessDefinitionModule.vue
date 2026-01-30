@@ -1795,7 +1795,6 @@ export default {
                                 }
 
                                 const options = {
-                                    name: processDefinition.processDefinitionName,
                                     definition: processDefinition
                                 }
                                 backend.putRawDefinition(this.bpmn, processDefinition.processDefinitionId, options);

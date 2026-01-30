@@ -55,10 +55,10 @@
                   :items="settingInfo.settingValue" @keyup.enter="save" persistent-placeholder></v-select>
         
         <template v-else-if="(settingInfo.settingType === 'items') && isShowCheck(settingInfo)">
-          <v-tabs v-model="componentProps['localIsDynamicLoad']" color="primary" fixed-tabs>
+          <v-tabs v-model="componentProps['localIsDynamicLoad']" color="primary" class="form-definition-panel-tabs-start">
               <v-tab value="fixed">{{ $t('FormDefinitionPanel.fixed') }}</v-tab>
-              <v-tab value="urlBinding">{{ $t('FormDefinitionPanel.urlBinding') }}</v-tab>
-              <v-tab value="dataBinding">{{ $t('FormDefinitionPanel.dataBinding') }}</v-tab>
+              <!-- <v-tab value="urlBinding">{{ $t('FormDefinitionPanel.urlBinding') }}</v-tab>
+              <v-tab value="dataBinding">{{ $t('FormDefinitionPanel.dataBinding') }}</v-tab> -->
           </v-tabs>
           <v-window v-model="componentProps['localIsDynamicLoad']" class="fill-height">
               <v-window-item value="fixed" class="fill-height" style="overflow-y: auto; padding:5px;">
@@ -253,3 +253,9 @@
     }
   }
 </script>
+
+<style scoped>
+.form-definition-panel-tabs-start :deep(.v-tab-slider) {
+    margin-inline-start: 0;
+}
+</style>

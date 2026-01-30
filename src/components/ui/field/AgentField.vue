@@ -259,22 +259,22 @@ export default {
             resetGenerator: false,
             providers: [
                 { key: 'openai', name: 'OpenAI' },
-                { key: 'anthropic', name: 'Claude (Anthropic)' },
-                { key: 'gemini', name: 'Google Gemini' },
-                { key: 'groq', name: 'Grok (xAI)' }
+                // { key: 'anthropic', name: 'Claude (Anthropic)' },
+                // { key: 'gemini', name: 'Google Gemini' },
+                // { key: 'groq', name: 'Grok (xAI)' }
             ],
             modelsByProvider: {
                 openai: [
                     { key: 'gpt-4.1', name: 'GPT-4.1' },
-                    { key: 'gpt-4.1-mini', name: 'GPT-4.1 Mini' },
-                    { key: 'gpt-4.1-nano', name: 'GPT-4.1 Nano' },
-                    { key: 'gpt-4', name: 'GPT-4' },
-                    { key: 'gpt-4-turbo', name: 'GPT-4 Turbo' },
-                    { key: 'gpt-4-32k', name: 'GPT-4 (32k)' },
-                    { key: 'gpt-4o', name: 'GPT-4 Omni' },
-                    { key: 'gpt-4o-mini', name: 'GPT-4 Omni Mini' },
-                    { key: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo' },
-                    { key: 'gpt-3.5-turbo-16k', name: 'GPT-3.5 Turbo (16k)' }
+                    // { key: 'gpt-4.1-mini', name: 'GPT-4.1 Mini' },
+                    // { key: 'gpt-4.1-nano', name: 'GPT-4.1 Nano' },
+                    // { key: 'gpt-4', name: 'GPT-4' },
+                    // { key: 'gpt-4-turbo', name: 'GPT-4 Turbo' },
+                    // { key: 'gpt-4-32k', name: 'GPT-4 (32k)' },
+                    // { key: 'gpt-4o', name: 'GPT-4 Omni' },
+                    // { key: 'gpt-4o-mini', name: 'GPT-4 Omni Mini' },
+                    // { key: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo' },
+                    // { key: 'gpt-3.5-turbo-16k', name: 'GPT-3.5 Turbo (16k)' }
                 ],
                 anthropic: [
                     { key: 'claude-sonnet-4', name: 'Claude Sonnet 4' },
