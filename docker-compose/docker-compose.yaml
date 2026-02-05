@@ -29,6 +29,9 @@ services:
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USERNAME: ${SMTP_USERNAME:-${SMTP_USER}}
       SMTP_PASSWORD: ${SMTP_PASSWORD:-${SMTP_PASS}}
+    depends_on:
+      - db
+      - rest
 
   polling-service:
     image: ghcr.io/uengine-oss/process-gpt-polling-service:latest
@@ -49,6 +52,7 @@ services:
     depends_on:
       - completion
       - memento
+      - db
 
   memento:
     image: ghcr.io/uengine-oss/process-gpt-memento:latest
@@ -58,6 +62,9 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       SUPABASE_URL: ${SUPABASE_URL}
       SUPABASE_KEY: ${SERVICE_ROLE_KEY}
+    depends_on:
+      - db
+      - rest
 
   crewai-action:
     image: ghcr.io/uengine-oss/crewai-action:latest
@@ -65,13 +72,35 @@ services:
       - "8001:8000"
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_KEY: ${SERVICE_ROLE_KEY}
+      ENV: ${ENV}
+      DB_NAME: ${DB_NAME:-${POSTGRES_DB}}
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      DB_HOST: ${DB_HOST:-${POSTGRES_HOST}}
+      DB_PORT: ${DB_PORT:-${POSTGRES_PORT}}
+    depends_on:
+      - db
+      - rest
 
   crewai-deep-research:
-    image: ghcr.io/uengine-oss/crewai-deep-research:latest
+    image: ghcr.io/uengine-oss/crewai-deep-research:b82f8b0
     ports:
       - "8002:8002"
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_KEY: ${SERVICE_ROLE_KEY}
+      ENV: ${ENV}
+      DB_NAME: ${DB_NAME:-${POSTGRES_DB}}
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      DB_HOST: ${DB_HOST:-${POSTGRES_HOST}}
+      DB_PORT: ${DB_PORT:-${POSTGRES_PORT}}
+    depends_on:
+      - db
+      - rest
 
   fcm-service:
     image: ghcr.io/uengine-oss/fcm-service:latest
@@ -82,7 +111,7 @@ services:
       SUPABASE_KEY: ${SERVICE_ROLE_KEY}
       SUPABASE_JWT_SECRET: ${JWT_SECRET}
       DB_NAME: ${DB_NAME:-${POSTGRES_DB}}
-      DB_USER: ${DB_USER:-${POSTGRES_USER}}
+      DB_USER: supabase_admin
       DB_PASSWORD: ${DB_PASSWORD:-${POSTGRES_PASSWORD}}
       DB_HOST: ${DB_HOST:-${POSTGRES_HOST}}
       DB_PORT: ${DB_PORT:-${POSTGRES_PORT}}
@@ -93,6 +122,9 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+    depends_on:
+      - db
+      - rest
 
   nginx:
     image: nginx:latest
@@ -229,6 +261,9 @@ services:
       PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
       PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
     command: "postgrest"
+    depends_on:
+      - db
+      - realtime
 
   realtime:
     container_name: realtime-dev.supabase-realtime
@@ -369,7 +404,7 @@ services:
       LOGFLARE_SINGLE_TENANT: true
       LOGFLARE_SUPABASE_MODE: true
       LOGFLARE_MIN_CLUSTER_SIZE: 1
-      POSTGRES_BACKEND_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/_supabase
+      POSTGRES_BACKEND_URL: postgresql://supabase_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/_supabase
       POSTGRES_BACKEND_SCHEMA: _analytics
       LOGFLARE_FEATURE_FLAG_OVERRIDE: multibackend=true
     ports:
@@ -409,8 +444,8 @@ services:
       - ./volumes/db/_supabase.sql:/docker-entrypoint-initdb.d/migrations/97-_supabase.sql:Z
       - ./volumes/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
       - ./volumes/db/pooler.sql:/docker-entrypoint-initdb.d/migrations/99-pooler.sql:Z
+      - ./volumes/db/init.sql:/docker-entrypoint-initdb.d/init-scripts/100-init.sql:Z
       - db-config:/etc/postgresql-custom
-
 
 volumes:
   db-config:
